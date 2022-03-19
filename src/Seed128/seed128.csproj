@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Description>SEED is used in various fields such as e-commerce, e-mail, Internet banking, data storage, VPN, and intellectual property protection.
+SEED source code was distributed to domestic and foreign companies and schools through e-mail.</Description>
+		<Copyright>OdinSoft Korea</Copyright>
+		<PackageProjectUrl>https://github.com/odinsoft-korea/odinsoft.security</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/odinsoft-korea/odinsoft.security</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>SEED128;OdinSoft;Crypto;Korea</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<EnableNETAnalyzers>False</EnableNETAnalyzers>
+		<EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
+		<DefineConstants>INSIDE_CORLIB</DefineConstants>
+		<AssemblyVersion>2.3.19.128</AssemblyVersion>
+		<FileVersion>2.3.19.0</FileVersion>
+		<Version>2.3.19</Version>
+		<PackageIcon>odinsoft-symbol.png</PackageIcon>
+		<Company>OdinSoft</Company>
+		<Product>OdinSoft.Security.Seed128</Product>
+		<Authors>SeongAhn Lee</Authors>
+		<PackageId>OdinSoft.Security.Seed128</PackageId>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\doc\odinsoft-symbol.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>

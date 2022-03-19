@@ -1,0 +1,44 @@
+﻿namespace OdinSoft.Security.Cryptography.Test
+{
+    internal class Program
+    {
+        static string RsaEncryptTest(byte[] symmetry_key)
+        {
+            RsaEncryption rsa = new RsaEncryption();
+            //Console.WriteLine($"Public key: {rsa.GetPublicKey()} \n");
+
+            var cypher = rsa.Encrypt(symmetry_key);
+            return cypher;
+        }
+ 
+        static (string cypher, byte[] key) Seed128Test(string password)
+        {
+            var _seed_key = new byte[16];
+            (new Random(128)).NextBytes(_seed_key);
+
+            var __seed = new Seed128(_seed_key,
+                new byte[]
+                {
+                    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
+                    0x38, 0x39, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35
+                });
+
+            var _cypher = __seed.PlainStringToChiperBase64(password);
+            return (_cypher, __seed.Key);
+        }
+
+        static void Main(string[] args)
+        {
+            var _seed_cypher = Program.Seed128Test("1234");
+            Console.WriteLine($"seed cypher: {_seed_cypher.cypher}");
+            Console.WriteLine($"length: {_seed_cypher.cypher.Length}");
+            Console.WriteLine();
+
+            var _rsa_cypher = Program.RsaEncryptTest(_seed_cypher.key);
+
+            Console.WriteLine($"rsa cypher: {_rsa_cypher}");
+            Console.WriteLine($"length: {_rsa_cypher.Length}");
+            Console.ReadLine();
+        }
+    }
+}

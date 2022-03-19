@@ -1,1 +1,2 @@
-# odinsoft.security
+# OdinSoft.Security
+Seed Security
