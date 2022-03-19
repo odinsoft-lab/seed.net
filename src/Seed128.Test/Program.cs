@@ -10,18 +10,16 @@
             var cypher = rsa.Encrypt(symmetry_key);
             return cypher;
         }
- 
+
         static (string cypher, byte[] key) Seed128Test(string password)
         {
             var _seed_key = new byte[16];
             (new Random(128)).NextBytes(_seed_key);
 
-            var __seed = new Seed128(_seed_key,
-                new byte[]
-                {
-                    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
-                    0x38, 0x39, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35
-                });
+            var _seed_iv = new byte[16];
+            (new Random(128)).NextBytes(_seed_iv);
+
+            var __seed = new Seed128(_seed_key,_seed_iv);
 
             var _cypher = __seed.PlainStringToChiperBase64(password);
             return (_cypher, __seed.Key);
