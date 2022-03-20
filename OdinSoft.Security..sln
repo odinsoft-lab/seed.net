@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "seed128", "src\Seed128\seed
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A4BCB033-70CA-4FE3-B359-F0ADAEC6016D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "seed128.webapi", "src\seed128.webapi\seed128.webapi.csproj", "{77A9EBED-A21D-4847-8AB6-A711C28DA599}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,10 +23,6 @@ Global
 		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77A9EBED-A21D-4847-8AB6-A711C28DA599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77A9EBED-A21D-4847-8AB6-A711C28DA599}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77A9EBED-A21D-4847-8AB6-A711C28DA599}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77A9EBED-A21D-4847-8AB6-A711C28DA599}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,7 +30,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E989844B-E718-4885-97A5-661244898F85} = {A4BCB033-70CA-4FE3-B359-F0ADAEC6016D}
 		{14A38B95-7E9B-4F44-8795-2E96B233A548} = {A4BCB033-70CA-4FE3-B359-F0ADAEC6016D}
-		{77A9EBED-A21D-4847-8AB6-A711C28DA599} = {A4BCB033-70CA-4FE3-B359-F0ADAEC6016D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F5E1DBBC-882B-4030-8E93-3BD066E8D700}
