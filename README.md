@@ -2,7 +2,7 @@
 
 A lightweight implementation of the Korean SEED 128-bit block cipher for .NET. The library targets .NET Standard 2.0 and the console example targets .NET 9.0.
 
-![OdinSoft Logo](./docs/logo-files/odinsoft-logo.png)
+F![OdinSoft Logo](./docs/logo-files/odinsoft-logo.png)
 
 ### Highlights
 
@@ -41,13 +41,13 @@ Note: `seed128.csproj` is configured to pack a package icon. If local builds fai
 
 ## Quick start
 
-Namespace: `Seed.Security.Cryptography`
+Namespace: `Seed.Net.Cryptography`
 
 ```csharp
 using System;
 using System.Text;
 using System.Security.Cryptography;
-using Seed.Security.Cryptography;
+using Seed.Net.Cryptography;
 
 // Prepare 16-byte key/IV
 var key = new byte[16];
@@ -122,7 +122,7 @@ Build issues & fixes:
 	2) Update icon path: point to the actual file (e.g., `docs/logo-files/odinsoft-logo.png`) and update the ItemGroup Include/PackagePath
 	3) Add missing path/file: create `docs/logo-files/odinsoft-logo.png`
 
-- The solution file (`seed.security..sln`) may reference a different test project path. Building projects individually is recommended.
+- The solution file (`seed.net.sln`) may reference a different test project path. Building projects individually is recommended.
 
 ---
 

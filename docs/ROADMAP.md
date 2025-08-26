@@ -1,6 +1,6 @@
 # Project Roadmap
 
-This roadmap outlines the planned evolution of seed.security. Timelines are indicative and may change based on community needs and maintainer capacity.
+This roadmap outlines the planned evolution of seed.net. Timelines are indicative and may change based on community needs and maintainer capacity.
 
 ## Short term (0-1 releases)
 

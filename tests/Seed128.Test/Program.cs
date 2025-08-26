@@ -1,4 +1,4 @@
-﻿namespace Seed.Security.Cryptography.Test
+﻿namespace Seed.Net.Cryptography.Test
 {
     internal class Program
     {

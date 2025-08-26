@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Seed.Security.Cryptography
+namespace Seed.Net.Cryptography
 {
     /// <summary>
     /// Base utilities for SEED: S-box tables, key-schedule constants, endianness helpers,

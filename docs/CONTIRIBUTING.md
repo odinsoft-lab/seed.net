@@ -1,6 +1,6 @@
 # Contributing Guide
 
-Thanks for your interest in contributing to seed.security!
+Thanks for your interest in contributing to seed.net!
 
 This document explains how to propose changes, build and test locally, and submit pull requests in a way that keeps the project stable and easy to maintain.
 

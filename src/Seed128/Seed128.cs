@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Seed.Security.Cryptography
+namespace Seed.Net.Cryptography
 {
     /// <summary>
     /// SEED-128 block cipher implementation built on the base Seed utilities.
