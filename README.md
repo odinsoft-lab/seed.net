@@ -168,19 +168,13 @@ Tip: If the test vector is block-aligned, comparing with Padding=false (ECB or C
 
 ---
 
-## License
+## 👥 Team
 
-MIT License. See package metadata and repository headers for details.
-
----
-
-## Credits
-
-- Copyright © OdinSoft
-- Authors: SeongAhn Lee et al.
+### **Core Development Team**
+- **SEONGAHN** - Lead Developer & Project Architect ([lisa@odinsoft.co.kr](mailto:lisa@odinsoft.co.kr))
+- **YUJIN** - Senior Developer & Exchange Integration Specialist ([yoojin@odinsoft.co.kr](mailto:yoojin@odinsoft.co.kr))
+- **SEJIN** - Software Developer & API Implementation ([saejin@odinsoft.co.kr](mailto:saejin@odinsoft.co.kr))
 
 ---
 
-## Contributing
-
-Issues and PRs are welcome. Changes to packaging (icons/packing) may affect CI/release; please discuss before submitting.
+**Built with ❤️ by the ODINSOFT Team** | [⭐ Star us on GitHub](https://github.com/odinsoft-lab/seed.net)
