@@ -2,7 +2,7 @@
 using System.Text;
 using System.Xml.Serialization;
 
-namespace OdinSoft.Security.Cryptography.Test
+namespace Seed.Security.Cryptography.Test
 {
     public class RsaEncryption
     {

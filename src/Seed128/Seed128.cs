@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text;
 
-namespace OdinSoft.Security.Cryptography
+namespace Seed.Security.Cryptography
 {
     /// <summary>
-    ///
+    /// SEED-128 block cipher implementation built on the base Seed utilities.
     /// </summary>
     public class Seed128 : Seed
     {
@@ -12,7 +12,7 @@ namespace OdinSoft.Security.Cryptography
         private const int __round_size = 32;
 
         /// <summary>
-        /// SEED 암호화는 32바이트 대칭키 암호화입니다
+        /// SEED-128 is a 128-bit block cipher using a 128-bit symmetric key.
         /// </summary>
         /// <param name="seed_key"></param>
         /// <param name="seed_iv"></param>
@@ -22,7 +22,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        ///
+        /// Update round keys (type 0 update).
         /// </summary>
         /// <param name="K"></param>
         /// <param name="idx"></param>
@@ -46,7 +46,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        ///
+        /// Update round keys (type 1 update).
         /// </summary>
         /// <param name="K"></param>
         /// <param name="idx"></param>
@@ -132,8 +132,7 @@ namespace OdinSoft.Security.Cryptography
             R0 = BitConverter.ToUInt32(pData, 8);
             R1 = BitConverter.ToUInt32(pData, 12);
 
-            // Reorder for big endian
-            // Because SEED use little endian order in default
+            // Reorder for big endian (SEED uses little-endian internally by default)
             L0 = EndianChange(L0);
             L1 = EndianChange(L1);
             R0 = EndianChange(R0);
@@ -161,7 +160,7 @@ namespace OdinSoft.Security.Cryptography
             R0 = EndianChange(R0);
             R1 = EndianChange(R1);
 
-            // Copying output values from last round to pbData
+            // Copy output values from the last round to pData
             Buffer.BlockCopy(BitConverter.GetBytes(R0), 0, pData, 0, 4);
             Buffer.BlockCopy(BitConverter.GetBytes(R1), 0, pData, 4, 4);
             Buffer.BlockCopy(BitConverter.GetBytes(L0), 0, pData, 8, 4);
@@ -213,7 +212,7 @@ namespace OdinSoft.Security.Cryptography
             R0 = EndianChange(R0);
             R1 = EndianChange(R1);
 
-            // Copy output values from last round to pbData
+            // Copy output values from the last round to pData
             Buffer.BlockCopy(BitConverter.GetBytes(R0), 0, pData, 0, 4);
             Buffer.BlockCopy(BitConverter.GetBytes(R1), 0, pData, 4, 4);
             Buffer.BlockCopy(BitConverter.GetBytes(L0), 0, pData, 8, 4);
@@ -221,7 +220,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        ///
+        /// Encrypt a byte array. If Padding=true, PKCS#7-like padding is applied and CBC is used.
         /// </summary>
         /// <param name="plain_data"></param>
         /// <returns></returns>
@@ -249,7 +248,7 @@ namespace OdinSoft.Security.Cryptography
             var _round_key = new uint[__round_size];
             SeedEncRoundKey(ref _round_key, base.Key);
 
-            // CBC 모드 초기값 IV
+            // CBC initial value (IV)
             var _prev_data = new byte[__pad_size];
             if (base.IV != null && base.IV.Length > 0)
                 Buffer.BlockCopy(base.IV, 0, _prev_data, 0, __pad_size);
@@ -274,7 +273,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        ///
+        /// Decrypt a byte array. If Padding=true, CBC de-chaining and unpadding are applied.
         /// </summary>
         /// <param name="encrypted_data"></param>
         /// <returns></returns>
@@ -287,7 +286,7 @@ namespace OdinSoft.Security.Cryptography
             var _round_key = new uint[__round_size];
             SeedEncRoundKey(ref _round_key, base.Key);
 
-            // CBC 모드 초기값 IV
+            // CBC initial value (IV)
             var _prev_data = new byte[__pad_size];
             if (base.IV != null && base.IV.Length > 0)
                 Buffer.BlockCopy(base.IV, 0, _prev_data, 0, __pad_size);
@@ -336,7 +335,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        /// 평문 Base64 문자열을 암호화된 Base64 문자열로 변환 합니다.
+        /// Convert a plain Base64 string to an encrypted Base64 string.
         /// </summary>
         /// <param name="plain_text">plain text</param>
         /// <returns></returns>
@@ -346,7 +345,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        /// 암호화된 Base64 문자열을 평문 Base64 문자열로 변환 합니다.
+        /// Convert an encrypted Base64 string to a plain Base64 string.
         /// </summary>
         /// <param name="chiper_text">chiper text</param>
         /// <returns></returns>
@@ -356,7 +355,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        /// 평문 바이트 배열을 암호화된 Base64 문자열로 변환 합니다.
+        /// Convert plain bytes to an encrypted Base64 string.
         /// </summary>
         /// <param name="plain_data"></param>
         /// <returns></returns>
@@ -366,7 +365,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        /// 암호화된 Base64 문자열을 평문 바이트 배열로 변환 합니다.
+        /// Convert an encrypted Base64 string to plain bytes.
         /// </summary>
         /// <param name="chiper_text">chiper text</param>
         /// <returns></returns>
@@ -376,7 +375,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        /// 평문 문자열을 암호화된 Base64 문자열로 변환 합니다.
+        /// Convert a plain string to an encrypted Base64 string.
         /// </summary>
         /// <param name="plain_text">plain text</param>
         /// <returns></returns>
@@ -386,7 +385,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        /// 암호화된 Base64 문자열을 평문 문자열로 변환 합니다.
+        /// Convert an encrypted Base64 string to a plain string.
         /// </summary>
         /// <param name="chiper_text">chiper text</param>
         /// <returns></returns>
@@ -396,7 +395,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        /// 평문 문자열을 암호화된 문자열로 변환 합니다.
+        /// Convert a plain string to an encrypted string (bytes to UTF-8 string for demonstration).
         /// </summary>
         /// <param name="plain_text">plain text</param>
         /// <returns></returns>
@@ -406,7 +405,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        /// 암호화된 문자열을 평문 문자열로 변환 합니다.
+        /// Convert an encrypted string to a plain string.
         /// </summary>
         /// <param name="chiper_text">chiper text</param>
         /// <returns></returns>

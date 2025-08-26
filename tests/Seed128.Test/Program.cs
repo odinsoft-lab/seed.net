@@ -1,11 +1,12 @@
-﻿namespace OdinSoft.Security.Cryptography.Test
+﻿namespace Seed.Security.Cryptography.Test
 {
     internal class Program
     {
         static string RsaEncryptTest(byte[] symmetry_key)
         {
             RsaEncryption rsa = new RsaEncryption();
-            //Console.WriteLine($"Public key: {rsa.GetPublicKey()} \n");
+            // You can inspect the public key if needed for interop testing.
+            // Console.WriteLine($"Public key: {rsa.GetPublicKey()} \n");
 
             var cypher = rsa.Encrypt(symmetry_key);
             return cypher;
@@ -19,7 +20,7 @@
             var _seed_iv = new byte[16];
             (new Random(128)).NextBytes(_seed_iv);
 
-            var __seed = new Seed128(_seed_key,_seed_iv);
+            var __seed = new Seed128(_seed_key, _seed_iv);
 
             var _cypher = __seed.PlainStringToChiperBase64(password);
             return (_cypher, __seed.Key);

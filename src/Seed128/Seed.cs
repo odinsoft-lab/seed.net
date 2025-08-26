@@ -1,14 +1,15 @@
 ﻿using System;
 
-namespace OdinSoft.Security.Cryptography
+namespace Seed.Security.Cryptography
 {
     /// <summary>
-    ///
+    /// Base utilities for SEED: S-box tables, key-schedule constants, endianness helpers,
+    /// bit rotations, core round function, and XOR helper.
     /// </summary>
     public abstract class Seed //: System.Security.Cryptography.SymmetricAlgorithm
     {
         //-------------------------------------------------------------------------------------------------------------------------//
-        // SSN
+        // S-Box tables (SS0..SS3)
         //-------------------------------------------------------------------------------------------------------------------------//
         protected uint[] SS0 = new uint[256]
         {
@@ -184,7 +185,7 @@ namespace OdinSoft.Security.Cryptography
         protected const uint KC23 = 0xdccf1bbc;
 
         /// <summary>
-        ///
+        /// Initialize a SEED context with key, IV, and padding option.
         /// </summary>
         /// <param name="seed_key"></param>
         /// <param name="seed_iv"></param>
@@ -197,7 +198,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        ///
+        /// 16-byte secret key.
         /// </summary>
         public byte[] Key
         {
@@ -206,7 +207,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        ///
+        /// 16-byte initialization vector for CBC mode (ignored when Padding=false).
         /// </summary>
         public byte[] IV
         {
@@ -215,7 +216,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        ///
+        /// When true, apply PKCS#7-like padding and use CBC mode; when false, process as ECB without padding.
         /// </summary>
         public bool Padding
         {
@@ -224,7 +225,7 @@ namespace OdinSoft.Security.Cryptography
         }
 
         //-------------------------------------------------------------------------------------------------------------------------//
-        // internal functions
+        // Internal helpers
         //-------------------------------------------------------------------------------------------------------------------------//
         protected byte GetB0(uint A)
         {
@@ -257,10 +258,10 @@ namespace OdinSoft.Security.Cryptography
         }
 
         /// <summary>
-        /// Round function F and adding output of F to L.
-        /// L0, L1 : left input values at each round
-        /// R0, R1 : right input values at each round
-        /// K : round keys at each round
+        /// Round function F and addition of F output to the left branch.
+        /// L0, L1: left input values per round
+        /// R0, R1: right input values per round
+        /// K: round keys
         /// </summary>
         /// <param name="A"></param>
         /// <param name="B"></param>
