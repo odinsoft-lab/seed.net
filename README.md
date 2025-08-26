@@ -41,13 +41,13 @@ Note: `seed128.csproj` is configured to pack a package icon. If local builds fai
 
 ## Quick start
 
-Namespace: `OdinSoft.Security.Cryptography`
+Namespace: `Seed.Security.Cryptography`
 
 ```csharp
 using System;
 using System.Text;
 using System.Security.Cryptography;
-using OdinSoft.Security.Cryptography;
+using Seed.Security.Cryptography;
 
 // Prepare 16-byte key/IV
 var key = new byte[16];
