@@ -1,6 +1,6 @@
 ## SEED-128 for .NET (C#)
 
-A lightweight implementation of the Korean SEED 128-bit block cipher for .NET. The library targets .NET Standard 2.0 and the console example targets .NET 6.0.
+A lightweight implementation of the Korean SEED 128-bit block cipher for .NET. The library targets .NET Standard 2.0 and the console example targets .NET 9.0.
 
 ![OdinSoft Logo](./docs/logo-files/odinsoft-logo.png)
 
@@ -15,8 +15,8 @@ A lightweight implementation of the Korean SEED 128-bit block cipher for .NET. T
 
 ### Supported runtimes
 
-- Library: .NET Standard 2.0
-- Example/Tests: .NET 6.0
+- Library: .NET Standard 2.0/2.1, .NET Core 8/9
+- Example/Tests: .NET 9.0
 
 ---
 
@@ -117,10 +117,10 @@ This repository includes the library (`src/Seed128`) and a console example (`tes
 
 Build issues & fixes:
 
-- `seed128.csproj` is configured to pack an icon from `..\..\doc\odinsoft-symbol.png`, while the repo contains `docs/logo-files/odinsoft-logo.png`. If local build fails, choose one:
+- `seed128.csproj` is configured to pack an icon from `..\..\docs\logo-files\odinsoft-logo.png`, while the repo contains `docs/logo-files/odinsoft-logo.png`. If local build fails, choose one:
 	1) Disable packing: set `GeneratePackageOnBuild` to `False`
 	2) Update icon path: point to the actual file (e.g., `docs/logo-files/odinsoft-logo.png`) and update the ItemGroup Include/PackagePath
-	3) Add missing path/file: create `doc/odinsoft-symbol.png`
+	3) Add missing path/file: create `docs/logo-files/odinsoft-logo.png`
 
 - The solution file (`seed.security..sln`) may reference a different test project path. Building projects individually is recommended.
 

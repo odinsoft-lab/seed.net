@@ -43,11 +43,11 @@ If you prefer Conventional Commits, it is welcome but not required.
   - `tests/Seed128.Test/seed128.Test.csproj`
 
 Note on local build failures:
-- `seed128.csproj` packs an icon from `..\\..\\doc\\odinsoft-symbol.png`, while the repo contains `docs/logo-files/odinsoft-logo.png`.
+- `seed128.csproj` packs an icon from `..\\..\\docs/logo-files\\odinsoft-logo.png`, while the repo contains `docs/logo-files/odinsoft-logo.png`.
   - Options:
     1) Disable packing (`GeneratePackageOnBuild=False`)
     2) Update the icon path to the existing file and fix the ItemGroup
-    3) Add `doc/odinsoft-symbol.png`
+    3) Add `docs/logo-files/odinsoft-logo.png`
 - The solution file may reference outdated paths; building projects individually is a reliable workaround.
 
 ## Testing
