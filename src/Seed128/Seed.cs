@@ -3,13 +3,20 @@
 namespace Seed.Net.Cryptography
 {
     /// <summary>
-    /// Base utilities for SEED: S-box tables, key-schedule constants, endianness helpers,
-    /// bit rotations, core round function, and XOR helper.
+    /// Base building blocks shared by SEED-128 operations.
+    /// Includes the S-box tables, key-schedule constants, endianness helpers,
+    /// bit rotations, the core F round function, and a block-wise XOR helper.
     /// </summary>
     public abstract class Seed //: System.Security.Cryptography.SymmetricAlgorithm
     {
+#pragma warning disable CS1591 // Suppress "missing XML comment" for low-level tables/constants
         //-------------------------------------------------------------------------------------------------------------------------//
         // S-Box tables (SS0..SS3)
+        //
+        // These are the 32-bit T-tables used by the SEED cipher's round function.
+        // Each table maps a single byte to a 32-bit value. The four lookups are
+        // combined with XOR to implement the non-linear layer efficiently.
+        // The values are taken from the official specification.
         //-------------------------------------------------------------------------------------------------------------------------//
         protected uint[] SS0 = new uint[256]
         {
@@ -157,7 +164,8 @@ namespace Seed.Net.Cryptography
 
         /*
          * Constants for Key schedule
-         *	 KC0 = golden ratio; KCi = ROTL(KCi-1, 1)
+         * KC0 is derived from the golden ratio; KCi = ROTL(KCi-1, 1).
+         * These are used during the key schedule to decorrelate subkeys.
          */
         protected const uint KC0 = 0x9e3779b9;
         protected const uint KC1 = 0x3c6ef373;
@@ -183,13 +191,15 @@ namespace Seed.Net.Cryptography
         protected const uint KC21 = 0x3733c6ef;
         protected const uint KC22 = 0x6e678dde;
         protected const uint KC23 = 0xdccf1bbc;
+#pragma warning restore CS1591
 
         /// <summary>
-        /// Initialize a SEED context with key, IV, and padding option.
+        /// Initialize a SEED context with a 16-byte key and a 16-byte IV.
+        /// The <see cref="Padding"/> property controls CBC+PKCS#7-like padding behavior (default: true).
         /// </summary>
-        /// <param name="seed_key"></param>
-        /// <param name="seed_iv"></param>
-        /// <param name="padding"></param>
+        /// <param name="seed_key">16-byte symmetric key.</param>
+        /// <param name="seed_iv">16-byte initialization vector for CBC mode. Ignored when <see cref="Padding"/> is false.</param>
+        /// <param name="padding">Optional. When true, uses CBC with padding; when false, uses ECB without padding.</param>
         public Seed(byte[] seed_key, byte[] seed_iv, bool padding = true)
         {
             this.Key = seed_key;
@@ -199,6 +209,7 @@ namespace Seed.Net.Cryptography
 
         /// <summary>
         /// 16-byte secret key.
+        /// Caller is responsible for supplying exactly 16 bytes.
         /// </summary>
         public byte[] Key
         {
@@ -207,7 +218,7 @@ namespace Seed.Net.Cryptography
         }
 
         /// <summary>
-        /// 16-byte initialization vector for CBC mode (ignored when Padding=false).
+        /// 16-byte initialization vector for CBC mode (ignored when <see cref="Padding"/> is false).
         /// </summary>
         public byte[] IV
         {
@@ -216,7 +227,8 @@ namespace Seed.Net.Cryptography
         }
 
         /// <summary>
-        /// When true, apply PKCS#7-like padding and use CBC mode; when false, process as ECB without padding.
+        /// When true, apply PKCS#7-like padding and use CBC mode; when false, process blocks as ECB without padding.
+        /// Note: when false, input length must be a multiple of 16 bytes.
         /// </summary>
         public bool Padding
         {
@@ -227,48 +239,52 @@ namespace Seed.Net.Cryptography
         //-------------------------------------------------------------------------------------------------------------------------//
         // Internal helpers
         //-------------------------------------------------------------------------------------------------------------------------//
-        protected byte GetB0(uint A)
-        {
-            return BitConverter.GetBytes(A)[0];
-        }
+        /// <summary>
+        /// Extract the least-significant byte (index 0) from a 32-bit word.
+        /// </summary>
+        protected byte GetB0(uint A) => BitConverter.GetBytes(A)[0];
 
-        protected byte GetB1(uint A)
-        {
-            return BitConverter.GetBytes(A)[1];
-        }
+        /// <summary>
+        /// Extract byte at index 1 from a 32-bit word.
+        /// </summary>
+        protected byte GetB1(uint A) => BitConverter.GetBytes(A)[1];
 
-        protected byte GetB2(uint A)
-        {
-            return BitConverter.GetBytes(A)[2];
-        }
+        /// <summary>
+        /// Extract byte at index 2 from a 32-bit word.
+        /// </summary>
+        protected byte GetB2(uint A) => BitConverter.GetBytes(A)[2];
 
-        protected byte GetB3(uint A)
-        {
-            return BitConverter.GetBytes(A)[3];
-        }
+        /// <summary>
+        /// Extract the most-significant byte (index 3) from a 32-bit word.
+        /// </summary>
+        protected byte GetB3(uint A) => BitConverter.GetBytes(A)[3];
 
+        /// <summary>
+        /// Swap endianness of a 32-bit word via rotate-and-mask trick used in SEED reference.
+        /// </summary>
         protected uint EndianChange(uint dwS)
         {
-            return ((ROTL((dwS), 8) & (uint)0x00ff00ff) | (ROTL((dwS), 24) & (uint)0xff00ff00));
-        }
-
-        protected uint ROTL(uint x, int n)
-        {
-            return (((x) << (n)) | ((x) >> (32 - (n))));
+            return ((ROTL(dwS, 8) & 0x00ff00ffu) | (ROTL(dwS, 24) & 0xff00ff00u));
         }
 
         /// <summary>
-        /// Round function F and addition of F output to the left branch.
-        /// L0, L1: left input values per round
-        /// R0, R1: right input values per round
-        /// K: round keys
+        /// Rotate-left on 32-bit unsigned integers.
         /// </summary>
-        /// <param name="A"></param>
-        /// <param name="B"></param>
-        /// <param name="C"></param>
-        /// <param name="D"></param>
-        /// <param name="K"></param>
-        /// <param name="offset"></param>
+        protected uint ROTL(uint x, int n)
+        {
+            return (x << n) | (x >> (32 - n));
+        }
+
+        /// <summary>
+        /// SEED round function F and Feistel combine step.
+        /// Adds the F output into the left branch (A,B) using XOR.
+        /// </summary>
+        /// <param name="A">Left word 0 (updated in-place).</param>
+        /// <param name="B">Left word 1 (updated in-place).</param>
+        /// <param name="C">Right word 0.</param>
+        /// <param name="D">Right word 1.</param>
+        /// <param name="K">Round key schedule (32 uints).</param>
+        /// <param name="offset">Index into K for the current round pair.</param>
         protected void SeedRound(ref uint A, ref uint B, uint C, uint D, uint[] K, int offset)
         {
             uint T0, T1;
@@ -287,11 +303,17 @@ namespace Seed.Net.Cryptography
             B ^= T1;
         }
 
+        /// <summary>
+        /// In-place XOR of two equal-length byte arrays, processed 4 bytes at a time.
+        /// Caller must ensure both buffers are at least 16 bytes for block operations.
+        /// </summary>
         protected void XorByte(ref byte[] operand1, byte[] operand2)
         {
             for (int i = 0; i < operand1.Length; i += 4)
             {
-                Buffer.BlockCopy(BitConverter.GetBytes(BitConverter.ToUInt32(operand1, i) ^ BitConverter.ToUInt32(operand2, i)), 0, operand1, i, 4);
+                // Load 32-bit words, XOR, and write back to operand1
+                var w = BitConverter.ToUInt32(operand1, i) ^ BitConverter.ToUInt32(operand2, i);
+                Buffer.BlockCopy(BitConverter.GetBytes(w), 0, operand1, i, 4);
             }
         }
     }

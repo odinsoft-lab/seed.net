@@ -4,7 +4,9 @@ using System.Text;
 namespace Seed.Net.Cryptography
 {
     /// <summary>
-    /// SEED-128 block cipher implementation built on the base Seed utilities.
+    /// SEED-128 block cipher built on top of the base <see cref="Seed"/> utilities.
+    /// Provides CBC with PKCS#7-like padding when <see cref="Seed.Padding"/> is true,
+    /// and raw ECB without padding when false.
     /// </summary>
     public class Seed128 : Seed
     {
@@ -14,23 +16,23 @@ namespace Seed.Net.Cryptography
         /// <summary>
         /// SEED-128 is a 128-bit block cipher using a 128-bit symmetric key.
         /// </summary>
-        /// <param name="seed_key"></param>
-        /// <param name="seed_iv"></param>
+        /// <param name="seed_key">16-byte symmetric key.</param>
+        /// <param name="seed_iv">16-byte initialization vector (used in CBC mode).</param>
         public Seed128(byte[] seed_key, byte[] seed_iv)
             : base(seed_key, seed_iv)
         {
         }
 
         /// <summary>
-        /// Update round keys (type 0 update).
+        /// Key schedule update (type 0). Produces two 32-bit subkeys at offset <paramref name="idx"/>.
         /// </summary>
-        /// <param name="K"></param>
-        /// <param name="idx"></param>
-        /// <param name="A"></param>
-        /// <param name="B"></param>
-        /// <param name="C"></param>
-        /// <param name="D"></param>
-        /// <param name="KC"></param>
+        /// <param name="K">Round key buffer (32 uints).</param>
+        /// <param name="idx">Offset into <paramref name="K"/> where the two words are stored.</param>
+        /// <param name="A">Key state word A (rotated in-place).</param>
+        /// <param name="B">Key state word B (rotated in-place).</param>
+        /// <param name="C">Key state word C.</param>
+        /// <param name="D">Key state word D.</param>
+        /// <param name="KC">Round constant.</param>
         private void RoundKeyUpdate0(ref uint[] K, int idx, ref uint A, ref uint B, ref uint C, ref uint D, uint KC)
         {
             uint T0 = A + C - KC;
@@ -46,15 +48,15 @@ namespace Seed.Net.Cryptography
         }
 
         /// <summary>
-        /// Update round keys (type 1 update).
+        /// Key schedule update (type 1). Produces two 32-bit subkeys at offset <paramref name="idx"/>.
         /// </summary>
-        /// <param name="K"></param>
-        /// <param name="idx"></param>
-        /// <param name="A"></param>
-        /// <param name="B"></param>
-        /// <param name="C"></param>
-        /// <param name="D"></param>
-        /// <param name="KC"></param>
+        /// <param name="K">Round key buffer (32 uints).</param>
+        /// <param name="idx">Offset into <paramref name="K"/> where the two words are stored.</param>
+        /// <param name="A">Key state word A.</param>
+        /// <param name="B">Key state word B.</param>
+        /// <param name="C">Key state word C (rotated in-place).</param>
+        /// <param name="D">Key state word D (rotated in-place).</param>
+        /// <param name="KC">Round constant.</param>
         private void RoundKeyUpdate1(ref uint[] K, int idx, ref uint A, ref uint B, ref uint C, ref uint D, uint KC)
         {
             uint T0 = A + C - KC;
@@ -70,10 +72,10 @@ namespace Seed.Net.Cryptography
         }
 
         /// <summary>
-        /// Encryption Key Schedule
+        /// Derive 32 32-bit round keys from the 128-bit user key.
         /// </summary>
-        /// <param name="pRoundKey">[out] round keys for encryption or decryption</param>
-        /// <param name="UserKey">[in] secret user key</param>
+        /// <param name="pRoundKey">Output buffer that receives the round keys (length 32).</param>
+        /// <param name="UserKey">Input 16-byte user key.</param>
         private void SeedEncRoundKey(ref uint[] pRoundKey, byte[] UserKey)
         {
             uint A, B, C, D;                    // Iuput/output values at each rounds
@@ -116,10 +118,10 @@ namespace Seed.Net.Cryptography
         }
 
         /// <summary>
-        /// Block Encryption
+        /// Encrypt a single 16-byte block in-place using the provided round keys.
         /// </summary>
-        /// <param name="pData">[in,out] data to be encrypted</param>
-        /// <param name="RoundKey">[in] round keys for encryption</param>
+        /// <param name="pData">Block to be encrypted (length 16).</param>
+        /// <param name="RoundKey">Round keys produced by the key schedule.</param>
         private void SeedEncryptBlock(ref byte[] pData, uint[] RoundKey)
         {
             uint L0, L1, R0, R1;                    // Iuput/output values at each rounds
@@ -132,7 +134,7 @@ namespace Seed.Net.Cryptography
             R0 = BitConverter.ToUInt32(pData, 8);
             R1 = BitConverter.ToUInt32(pData, 12);
 
-            // Reorder for big endian (SEED uses little-endian internally by default)
+            // Reorder for big endian (matches the reference algorithm behavior)
             L0 = EndianChange(L0);
             L1 = EndianChange(L1);
             R0 = EndianChange(R0);
@@ -168,10 +170,10 @@ namespace Seed.Net.Cryptography
         }
 
         /// <summary>
-        /// Same as encrypt, except that round keys are applied in reverse order
+        /// Decrypt a single 16-byte block in-place using the provided round keys (reverse order).
         /// </summary>
-        /// <param name="pData">[in,out] data to be decrypted</param>
-        /// <param name="RoundKey">[in] round keys for decryption</param>
+        /// <param name="pData">Block to be decrypted (length 16).</param>
+        /// <param name="RoundKey">Round keys produced by the key schedule.</param>
         private void SeedDecryptBlock(ref byte[] pData, uint[] RoundKey)
         {
             uint L0, L1, R0, R1;                    // Iuput/output values at each rounds
@@ -220,10 +222,12 @@ namespace Seed.Net.Cryptography
         }
 
         /// <summary>
-        /// Encrypt a byte array. If Padding=true, PKCS#7-like padding is applied and CBC is used.
+        /// Encrypt an arbitrary byte array.
+        /// When <see cref="Seed.Padding"/> is true, applies PKCS#7-like padding and CBC chaining.
+        /// When false, processes data as ECB without padding; input length must be a multiple of 16 bytes.
         /// </summary>
-        /// <param name="plain_data"></param>
-        /// <returns></returns>
+        /// <param name="plain_data">Plaintext bytes.</param>
+        /// <returns>Ciphertext bytes.</returns>
         public byte[] Encrypt(byte[] plain_data)
         {
             var _inp_size = plain_data.Length;
@@ -273,10 +277,12 @@ namespace Seed.Net.Cryptography
         }
 
         /// <summary>
-        /// Decrypt a byte array. If Padding=true, CBC de-chaining and unpadding are applied.
+        /// Decrypt an arbitrary byte array.
+        /// When <see cref="Seed.Padding"/> is true, performs CBC de-chaining and removes padding.
+        /// When false, processes data as ECB without padding; input length must be a multiple of 16 bytes.
         /// </summary>
-        /// <param name="encrypted_data"></param>
-        /// <returns></returns>
+        /// <param name="encrypted_data">Ciphertext bytes.</param>
+        /// <returns>Recovered plaintext bytes.</returns>
         public byte[] Decrypt(byte[] encrypted_data)
         {
             var _out_size = encrypted_data.Length;
@@ -336,9 +342,10 @@ namespace Seed.Net.Cryptography
 
         /// <summary>
         /// Convert a plain Base64 string to an encrypted Base64 string.
+        /// Useful when the caller already has base64-encoded input.
         /// </summary>
-        /// <param name="plain_text">plain text</param>
-        /// <returns></returns>
+        /// <param name="plain_text">Base64-encoded plaintext.</param>
+        /// <returns>Base64-encoded ciphertext.</returns>
         public string PlainBase64ToChiperBase64(string plain_text)
         {
             return Convert.ToBase64String(this.Encrypt(Convert.FromBase64String(plain_text)));
@@ -347,8 +354,8 @@ namespace Seed.Net.Cryptography
         /// <summary>
         /// Convert an encrypted Base64 string to a plain Base64 string.
         /// </summary>
-        /// <param name="chiper_text">chiper text</param>
-        /// <returns></returns>
+        /// <param name="chiper_text">Base64-encoded ciphertext.</param>
+        /// <returns>Base64-encoded plaintext.</returns>
         public string ChiperBase64ToPlainBase64(string chiper_text)
         {
             return Convert.ToBase64String(this.Decrypt(Convert.FromBase64String(chiper_text)));
@@ -357,8 +364,8 @@ namespace Seed.Net.Cryptography
         /// <summary>
         /// Convert plain bytes to an encrypted Base64 string.
         /// </summary>
-        /// <param name="plain_data"></param>
-        /// <returns></returns>
+        /// <param name="plain_data">Plaintext bytes.</param>
+        /// <returns>Base64-encoded ciphertext.</returns>
         public string PlainBytesToChiperBase64(byte[] plain_data)
         {
             return Convert.ToBase64String(this.Encrypt(plain_data));
@@ -367,8 +374,8 @@ namespace Seed.Net.Cryptography
         /// <summary>
         /// Convert an encrypted Base64 string to plain bytes.
         /// </summary>
-        /// <param name="chiper_text">chiper text</param>
-        /// <returns></returns>
+        /// <param name="chiper_text">Base64-encoded ciphertext.</param>
+        /// <returns>Plaintext bytes.</returns>
         public byte[] ChiperBase64ToPlainBytes(string chiper_text)
         {
             return this.Decrypt(Convert.FromBase64String(chiper_text));
@@ -377,8 +384,8 @@ namespace Seed.Net.Cryptography
         /// <summary>
         /// Convert a plain string to an encrypted Base64 string.
         /// </summary>
-        /// <param name="plain_text">plain text</param>
-        /// <returns></returns>
+        /// <param name="plain_text">Plain string (encoded using system default codepage).</param>
+        /// <returns>Base64-encoded ciphertext.</returns>
         public string PlainStringToChiperBase64(string plain_text)
         {
             return Convert.ToBase64String(this.Encrypt(Encoding.Default.GetBytes(plain_text)));
@@ -387,18 +394,19 @@ namespace Seed.Net.Cryptography
         /// <summary>
         /// Convert an encrypted Base64 string to a plain string.
         /// </summary>
-        /// <param name="chiper_text">chiper text</param>
-        /// <returns></returns>
+        /// <param name="chiper_text">Base64-encoded ciphertext.</param>
+        /// <returns>UTF-8 decoded plaintext string.</returns>
         public string ChiperBase64ToPlainString(string chiper_text)
         {
             return Encoding.UTF8.GetString(this.Decrypt(Convert.FromBase64String(chiper_text)));
         }
 
         /// <summary>
-        /// Convert a plain string to an encrypted string (bytes to UTF-8 string for demonstration).
+        /// Convert a plain string to an encrypted string (cipher bytes re-interpreted as UTF-8 for demo).
+        /// Note: for safe transport, prefer Base64 methods.
         /// </summary>
-        /// <param name="plain_text">plain text</param>
-        /// <returns></returns>
+        /// <param name="plain_text">Plain string (encoded using system default codepage).</param>
+        /// <returns>UTF-8 decoded string of ciphertext bytes (not portable).</returns>
         public string PlainStringToChiperString(string plain_text)
         {
             return Encoding.UTF8.GetString(this.Encrypt(Encoding.Default.GetBytes(plain_text)));
@@ -407,8 +415,8 @@ namespace Seed.Net.Cryptography
         /// <summary>
         /// Convert an encrypted string to a plain string.
         /// </summary>
-        /// <param name="chiper_text">chiper text</param>
-        /// <returns></returns>
+        /// <param name="chiper_text">Ciphertext as a raw string (UTF-8 decode of bytes).</param>
+        /// <returns>UTF-8 decoded plaintext string.</returns>
         public string ChiperStringToPlainString(string chiper_text)
         {
             return Encoding.UTF8.GetString(this.Decrypt(Encoding.Default.GetBytes(chiper_text)));

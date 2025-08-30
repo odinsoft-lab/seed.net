@@ -40,7 +40,7 @@ If you prefer Conventional Commits, it is welcome but not required.
 - Build the library (project-level build is recommended):
   - `src/Seed128/seed128.csproj`
 - Run the console example:
-  - `tests/Seed128.Test/seed128.Test.csproj`
+  - `samples/Seed128.Sample/seed128.sample.csproj`
 
 Note on local build failures:
 - `seed128.csproj` packs an icon from `..\\..\\docs/logo-files\\odinsoft-logo.png`, while the repo contains `docs/logo-files/odinsoft-logo.png`.

@@ -110,10 +110,10 @@ For security, CBC with padding is generally recommended. Avoid ECB for structure
 
 ## Build & run
 
-This repository includes the library (`src/Seed128`) and a console example (`tests/Seed128.Test`).
+This repository includes the library (`src/Seed128`) and a console example (`samples/seed128.sample`).
 
 - Build library: `src/Seed128/seed128.csproj`
-- Run example: `tests/Seed128.Test/seed128.Test.csproj`
+- Run example: `samples/Seed128.Sample/seed128.sample.csproj`
 
 Build issues & fixes:
 
@@ -128,7 +128,7 @@ Build issues & fixes:
 
 ## Example project
 
-Located under `tests/Seed128.Test`:
+Located under `samples/seed128.sample`:
 
 - `Program.cs`: Demonstrates encrypting a string with `Seed128` and encrypting the generated symmetric key with RSA.
 - `RsaEncryption.cs`: A simple example using .NET `RSACryptoServiceProvider`. For production, consider OAEP padding and robust key management.

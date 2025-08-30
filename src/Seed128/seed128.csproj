@@ -1,38 +1,84 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+        <!-- Target Framework -->
 		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
-	</PropertyGroup>
+		<LangVersion>latest</LangVersion>
 
-	<PropertyGroup>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Description>SEED is used in various fields such as e-commerce, e-mail, Internet banking, data storage, VPN, and intellectual property protection.
-SEED source code was distributed to domestic and foreign companies and schools through e-mail.</Description>
-		<Copyright>OdinSoft Korea</Copyright>
-		<PackageProjectUrl>https://github.com/odinsoft-korea/odinsoft.security</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/odinsoft-korea/odinsoft.security</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>SEED128;OdinSoft;Crypto;Korea</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<EnableNETAnalyzers>False</EnableNETAnalyzers>
-		<EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
-		<DefineConstants>INSIDE_CORLIB</DefineConstants>
-		<AssemblyVersion>2.3.19.128</AssemblyVersion>
-		<FileVersion>2.3.19.0</FileVersion>
-		<Version>2.3.19</Version>
+		<!-- Assembly Information -->
+		<AssemblyName>See.Net</AssemblyName>
+		<RootNamespace>See.Net</RootNamespace>
+
+		<!-- Versioning -->
+		<Version>2.3.20</Version>
+		<AssemblyVersion>2.3.20.0</AssemblyVersion>
+		<FileVersion>2.3.20.0</FileVersion>
+
+		<!-- Package Information -->
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<PackageId>OdinSoft.Security.Seed128</PackageId>
+		<Authors>SEONGAHN LEE</Authors>
+		<Product>OdinSoft.Security.Seed128</Product>
+		<Company>ODINSOFT</Company>
+		<Title>OdinSoft.Security.Seed128 — A lightweight implementation of the Korean SEED 128-bit block cipher for .NET</Title>
+		<Description>SEED is used in various fields such as e-commerce, e-mail, Internet banking, data storage, VPN, and intellectual property protection. SEED source code was distributed to domestic and foreign companies and schools through e-mail.</Description>
+		<Copyright>Copyright OdinSoft Co., Ltd. 2015~2025</Copyright>
+
+		<!-- Package Settings -->
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/odinsoft-lab/seed.net</PackageProjectUrl>
 		<PackageIcon>odinsoft-logo.png</PackageIcon>
-		<Company>OdinSoft</Company>
-		<Product>Seed.Net.Seed128</Product>
-		<Authors>SeongAhn Lee</Authors>
-		<PackageId>Seed.Net.Seed128</PackageId>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageTags>SEED128;Crypto;Korea</PackageTags>
+		<PackageReleaseNotes>v2.3.20
+- Added xUnit tests (tests/Seed128.Test): CBC/ECB round-trip and Base64 converter coverage; all green.
+- Enhanced English XML docs and inline comments in Seed and Seed128; XML docs generation enabled.
+- Suppressed CS1591 only for low-level S-Boxes/constants to reduce noise; no behavior changes.
+- Publishing script updated (scripts/publish-nuget.ps1): DryRun no longer requires API key; fixed test path/output dir; corrected package URL.
+- Package metadata refreshed: PackageId renamed to OdinSoft.Security.Seed128; README/license/icon included.
+- AssemblyName set to See.Net (no public API changes); namespaces in code unchanged.
+- Added Microsoft.Extensions.Logging and Abstractions references.</PackageReleaseNotes>
+
+		<!-- Repository Information -->
+		<RepositoryUrl>https://github.com/odinsoft-lab/seed.net</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+		<!-- Code Quality Settings - Simplified -->
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+		<!-- Suppress some noisy warnings, but keep CS1591 active to encourage documentation -->
+		<NoWarn>$(NoWarn);CS1998;CS0618</NoWarn>
+
+		<!-- Build Settings -->
+		<Deterministic>true</Deterministic>
+		<ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+		<Platforms>AnyCPU;x64;x86</Platforms>
+		<ApplicationIcon>odinsoft-logo.ico</ApplicationIcon>
+
+		<!-- Debugging and Symbols -->
+		<DebugType>embedded</DebugType>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
 	</PropertyGroup>
 
+	<!-- Package Files -->
 	<ItemGroup>
-	  <None Include="..\..\docs\logo-files\odinsoft-logo.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\docs\logo-files\odinsoft-logo.png" Pack="true" PackagePath="\" />
+		<Content Include="..\..\LICENSE.md" Link="LICENSE.md" />
+		<Content Include="odinsoft-logo.ico" />
 	</ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.8" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.8" />
+    </ItemGroup>
 
 </Project>

@@ -3,33 +3,100 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "seed128.Test", "tests\Seed128.Test\seed128.Test.csproj", "{E989844B-E718-4885-97A5-661244898F85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "seed128.sample", "samples\Seed128.Sample\seed128.sample.csproj", "{E989844B-E718-4885-97A5-661244898F85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "seed128", "src\Seed128\seed128.csproj", "{14A38B95-7E9B-4F44-8795-2E96B233A548}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A4BCB033-70CA-4FE3-B359-F0ADAEC6016D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seed128.Test", "tests\Seed128.Test\Seed128.Test.csproj", "{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{C8D5274F-AC00-46C7-1F8D-E88E81087A52}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{6C7B19E2-1DAC-43BB-87DF-E9DDF39C0D4E}"
+	ProjectSection(SolutionItems) = preProject
+		docs\CONTIRIBUTING.md = docs\CONTIRIBUTING.md
+		docs\ROADMAP.md = docs\ROADMAP.md
+		docs\TASK.md = docs\TASK.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "seed-specs", "seed-specs", "{1BE73D02-B305-4B67-A06F-7B8E15017BFE}"
+	ProjectSection(SolutionItems) = preProject
+		docs\seed-specs\SEED_Evaluation_Report_by_CRYPTREC.pdf = docs\seed-specs\SEED_Evaluation_Report_by_CRYPTREC.pdf
+		docs\seed-specs\SEED_Test_Vectors_for_Modified_SEED.pdf = docs\seed-specs\SEED_Test_Vectors_for_Modified_SEED.pdf
+		docs\seed-specs\[1]_SEED_Algorithm_Specification_korean_M.pdf = docs\seed-specs\[1]_SEED_Algorithm_Specification_korean_M.pdf
+		docs\seed-specs\[2]_SEED+128_Specification_english_M.pdf = docs\seed-specs\[2]_SEED+128_Specification_english_M.pdf
+		docs\seed-specs\[3]_SEED+128_Self_Evaluation-Korean-M.pdf = docs\seed-specs\[3]_SEED+128_Self_Evaluation-Korean-M.pdf
+		docs\seed-specs\[4]_SEED+128_Self_Evaluation-English_M.pdf = docs\seed-specs\[4]_SEED+128_Self_Evaluation-English_M.pdf
+		docs\seed-specs\[5]_SEED+128_Test_Vector_M.pdf = docs\seed-specs\[5]_SEED+128_Test_Vector_M.pdf
+		docs\seed-specs\[6]_SEED+128_OID+20091203_M.pdf = docs\seed-specs\[6]_SEED+128_OID+20091203_M.pdf
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{2A3A057F-5D22-31FD-628C-DF5EF75AEF1E}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E989844B-E718-4885-97A5-661244898F85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E989844B-E718-4885-97A5-661244898F85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E989844B-E718-4885-97A5-661244898F85}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E989844B-E718-4885-97A5-661244898F85}.Debug|x64.Build.0 = Debug|Any CPU
+		{E989844B-E718-4885-97A5-661244898F85}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E989844B-E718-4885-97A5-661244898F85}.Debug|x86.Build.0 = Debug|Any CPU
 		{E989844B-E718-4885-97A5-661244898F85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E989844B-E718-4885-97A5-661244898F85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E989844B-E718-4885-97A5-661244898F85}.Release|x64.ActiveCfg = Release|Any CPU
+		{E989844B-E718-4885-97A5-661244898F85}.Release|x64.Build.0 = Release|Any CPU
+		{E989844B-E718-4885-97A5-661244898F85}.Release|x86.ActiveCfg = Release|Any CPU
+		{E989844B-E718-4885-97A5-661244898F85}.Release|x86.Build.0 = Release|Any CPU
 		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Debug|x64.Build.0 = Debug|Any CPU
+		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Debug|x86.Build.0 = Debug|Any CPU
 		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Release|x64.ActiveCfg = Release|Any CPU
+		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Release|x64.Build.0 = Release|Any CPU
+		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Release|x86.ActiveCfg = Release|Any CPU
+		{14A38B95-7E9B-4F44-8795-2E96B233A548}.Release|x86.Build.0 = Release|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Debug|x64.Build.0 = Debug|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Debug|x86.Build.0 = Debug|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Release|x64.ActiveCfg = Release|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Release|x64.Build.0 = Release|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Release|x86.ActiveCfg = Release|Any CPU
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E989844B-E718-4885-97A5-661244898F85} = {A4BCB033-70CA-4FE3-B359-F0ADAEC6016D}
+		{E989844B-E718-4885-97A5-661244898F85} = {C8D5274F-AC00-46C7-1F8D-E88E81087A52}
 		{14A38B95-7E9B-4F44-8795-2E96B233A548} = {A4BCB033-70CA-4FE3-B359-F0ADAEC6016D}
+		{DA3F1B2B-B141-47EA-ADBA-5888D0CF40A3} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{1BE73D02-B305-4B67-A06F-7B8E15017BFE} = {6C7B19E2-1DAC-43BB-87DF-E9DDF39C0D4E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F5E1DBBC-882B-4030-8E93-3BD066E8D700}
